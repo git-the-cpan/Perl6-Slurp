@@ -50,4 +50,17 @@ for my $mode (qw( < +< )) {
 	is_deeply \@str, \@data, $desc;
 }
 
+TEST "scalar slurp from \$_ in main";
+for ('data') {
+	$str = slurp;
+	is $str, $data, $desc;
+}
+
+local $/;
+@ARGV = qw(data data);
+
+TEST "scalar slurp from ARGV in main";
+$str = slurp;
+is $str, $data.$data, $desc;
+
 unlink 'data';

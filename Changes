@@ -11,3 +11,10 @@ Revision history for Perl extension Perl6::Slurp.
 
 	- Updated internals to mirror interface changes in Perl6::Export
 
+
+
+0.03	Thu Mar 11 04:46:22 2004
+
+    - Updated Makefile.PL to note Perl6::Export 0.07 dependency
+
+	- Added correct behaviour when no source specified

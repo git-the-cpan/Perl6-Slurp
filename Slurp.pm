@@ -4,7 +4,7 @@ use Perl6::Export;
 use Carp;
 use warnings;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 my $mode_pat = qr{
 	^ \s* ( (?: < | \+< | \+>>? ) &? ) \s*
@@ -19,6 +19,7 @@ my $mode_plus_layers = qr{
 
 sub slurp is export(:DEFAULT) {
 	my $list_context = wantarray;
+	my $default = $_;
 	croak "Useless use of &slurp in a void context"
 		unless defined $list_context;
 
@@ -41,6 +42,10 @@ sub slurp is export(:DEFAULT) {
 	}
 
 	my ($mode, $source, @args) = @_;
+	$mode = defined $default ? $default
+		  : @ARGV            ? \*ARGV
+		  :                    "-"
+		unless defined $mode;
 	if (ref $mode) {
 		$source = $mode;
 		$mode   = "<";
@@ -90,7 +95,7 @@ sub slurp is export(:DEFAULT) {
 
 	my $chomp_into = ref $chomp_to eq 'CODE' ? $chomp_to : sub{ $chomp_to };
 
-	my $data = do { local $/; <$FH> };
+	my $data = $FH == \*ARGV ? join("",<>) : do { local $/; <$FH> };
 
 	my $irs = ref($/)		? $/
 			: defined($/)	? qr{\Q$/\E}
@@ -128,7 +133,7 @@ Perl6::Slurp - Implements the Perl 6 'slurp' built-in
 
     use Perl6::Slurp;
      
-	# Slurp a file by name:
+	# Slurp a file by name...
      
 	$file_contents = slurp 'filename';
 	$file_contents = slurp '<filename';
@@ -136,33 +141,45 @@ Perl6::Slurp - Implements the Perl 6 'slurp' built-in
 	$file_contents = slurp '+<', 'filename';
      
      
-	# Slurp a file via an (already open!) handle:
+	# Slurp a file via an (already open!) handle...
      
 	$file_contents = slurp \*STDIN;
 	$file_contents = slurp $filehandle;
 	$file_contents = slurp IO::File->new('filename');
      
      
-	# Slurp a string:
+	# Slurp a string...
      
 	$str_contents = slurp \$string;
 	$str_contents = slurp '<', \$string;
      
      
-	# Slurp a pipe:
+	# Slurp a pipe...
      
 	$str_contents = slurp 'tail -20 $filename |';
 	$str_contents = slurp '-|', 'tail', -20, $filename;
      
+
+	# Slurp with no source slurps from whatever $_ indicates...
+
+	for (@files) {
+		$contents .= slurp;
+	}
+
+	# ...or from the entire ARGV list, if $_ is undefined...
+
+	$_ = undef;
+	$ARGV_contents = slurp;
+
      
-	# Specify I/O layers as part of mode:
+	# Specify I/O layers as part of mode...
      
 	$file_contents = slurp '<:raw', $file;
 	$file_contents = slurp '<:utf8', $file;
 	$file_contents = slurp '<:raw :utf8', $file;
      
      
-	# Specify I/O layers as separate options:
+	# Specify I/O layers as separate options...
      
 	$file_contents = slurp $file, {raw=>1};
 	$file_contents = slurp $file, {utf8=>1};
@@ -170,20 +187,20 @@ Perl6::Slurp - Implements the Perl 6 'slurp' built-in
 	$file_contents = slurp $file, [raw=>1, utf8=>1];
      
      
-	# Specify input record separator:
+	# Specify input record separator...
        
 	$file_contents = slurp $file, {irs=>"\n\n"};
 	$file_contents = slurp '<', $file, {irs=>"\n\n"};
 	$file_contents = slurp {irs=>"\n\n"}, $file;
        
        
-	# Input record separator can be regex:
+	# Input record separator can be regex...
        
 	$file_contents = slurp $file, {irs=>qr/\n+/};
 	$file_contents = slurp '<', $file, {irs=>qr/\n+|\t{2,}};
        
        
-	# Specify autochomping:
+	# Specify autochomping...
        
 	$file_contents = slurp $file, {chomp=>1};
 	$file_contents = slurp {chomp=>1}, $file;
@@ -192,20 +209,20 @@ Perl6::Slurp - Implements the Perl 6 'slurp' built-in
        
        
 	# Specify autochomping that replaces irs
-	# with another string
+	# with another string...
        
 	$file_contents = slurp $file, {irs=>"\n\n", chomp=>"\n"};
 	$file_contents = slurp $file, {chomp=>"\n\n"}, {irs=>qr/\n+/};
        
        
-	# Specify autochomping that replaces irs
-	# with a dynamically computed string
+	# Specify autochomping that replaces
+	# irs with a dynamically computed string...
        
 	my $n = 1;
 	$file_contents = slurp $file, {chomp=>sub{ "\n#line ".$n++."\n"};
        
        
-	# Slurp in a list context:
+	# Slurp in a list context...
        
 	@lines = slurp 'filename';
 	@lines = slurp $filehandle;
@@ -244,8 +261,23 @@ a scalar reference,
 converts it to an input stream if necessary, and reads in the entire stream.
 If C<slurp> fails to set up or read the stream, it throws an exception.
 
-In a scalar context it returns the stream contents as a single string.
-If the stream is at EOF, C<slurp> returns an empty string.
+If no data source is specified C<slurp> uses the value of C<$_> as the
+source. If C<$_> is undefined, C<slurp> uses the C<@ARGV> list,
+and magically slurps the contents of I<all> the sources listed in C<@ARGV>.
+Note that the same magic is also applied if you explicitly slurp <*ARGV>, so
+the following three input operations:
+
+	$contents = join "", <ARGV>;
+
+	$contents = slurp \*ARGV;
+
+	$/ = undef;
+	$contents = slurp;
+
+are identical in effect.
+
+In a scalar context C<slurp> returns the stream contents as a single string.
+If the stream is at EOF, it returns an empty string.
 In a list context, it splits the contents after the appropriate input
 record separator and returns the resulting list of strings.
 
