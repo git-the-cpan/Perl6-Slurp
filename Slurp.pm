@@ -1,9 +1,10 @@
 package Perl6::Slurp;
+use 5.008;
 use Perl6::Export;
 use Carp;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 my $mode_pat = qr{
 	^ \s* ( (?: < | \+< | \+>>? ) &? ) \s*
@@ -16,7 +17,7 @@ my $mode_plus_layers = qr{
 	\z
 }x;
 
-sub slurp is exported {
+sub slurp is export(:DEFAULT) {
 	my $list_context = wantarray;
 	croak "Useless use of &slurp in a void context"
 		unless defined $list_context;
@@ -30,7 +31,7 @@ sub slurp is exported {
 		elsif ($type eq 'ARRAY') {
 			my @array = @{splice @_, $i--, 1};
 			while (@array) {
-				my ($layer, $value) = splice @array, 0, 2;;
+				my ($layer, $value) = splice @array, 0, 2;
 				croak "Incomplete layer specification for :$layer",
 				 	  "\n(did you mean: $layer=>1)\n "
 							unless $value;
@@ -44,12 +45,7 @@ sub slurp is exported {
 		$source = $mode;
 		$mode   = "<";
 	}
-	elsif ($mode =~ /$mode_plus_layers/x) {
-		for ($source) {
-			my $type = ref or last;
-		}
-	}
-	else {
+	elsif ($mode !~ /$mode_plus_layers/x) {
 		$source = $mode;
 		$mode = $source =~ s/$mode_pat//x  ?  "$1"
 			  : $source =~ s/ \| \s* $//x  ?  "-|"

@@ -1,5 +1,5 @@
 ==============================================================================
-                   Release of version 0.01 of Perl6::Slurp
+                   Release of version 0.02 of Perl6::Slurp
 ==============================================================================
 
 
@@ -34,9 +34,14 @@ Damian Conway (damian@conway.org)
 
 ==============================================================================
 
-CHANGES IN VERSION 0.01
+CHANGES IN VERSION 0.02
 
-(No changes have been documented for this version)
+
+	- Cleaned up some redundant vestigal code (thanks Steffen)
+
+	- Updated internals to mirror interface changes in Perl6::Export
+
+
 
 ==============================================================================
 

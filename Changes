@@ -1,6 +1,13 @@
 Revision history for Perl extension Perl6::Slurp.
-
 0.01  Wed Nov 26 21:58:48 2003
 	- original version; created by h2xs 1.22 with options
 		-A -P -X -f -n Perl6::Slurp
+
+
+
+0.02	Tue Mar  9 03:00:44 2004
+
+	- Cleaned up some redundant vestigal code (thanks Steffen)
+
+	- Updated internals to mirror interface changes in Perl6::Export
 
