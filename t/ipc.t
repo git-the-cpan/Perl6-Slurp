@@ -25,10 +25,8 @@ TEST "scalar slurp from '-|', 'system command'";
 $str = slurp '-|', 'echo input data';
 is $str, $data, $desc;
 
-TEST "scalar slurp from '-|', 'system', 'command', 'etc'";
-$str = slurp '-|', qw(echo input data);
-is $str, $data, $desc;
-
-TEST "scalar slurp from '-|', 'system', 'command', 'etc'";
-$str = slurp '-|', qw(echo input data);
-is $str, $data, $desc;
+if ($^O ne 'MSWin32') {
+    TEST "scalar slurp from '-|', 'system', 'command', 'etc'";
+    $str = slurp '-|', qw(echo input data);
+    is $str, $data, $desc;
+}

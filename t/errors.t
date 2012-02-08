@@ -17,7 +17,15 @@ TEST "shouldn't be able to slurp non-existent file";
 eval{slurp "non-existent file"}
 	? ok 0, $desc
 	: like $@,
-		   qr/^Can't open 'non-existent file': No such file or directory/,
+		   qr/^Can't open 'non-existent file'/,
+		   $desc;
+
+TEST "shouldn't be able to slurp failed pipe";
+
+eval{slurp "-|", "non-existent_prog"}
+	? ok 0, $desc
+	: like $@,
+		   qr/^Can't open '-|non-existent_prog'/,
 		   $desc;
 
 TEST "shouldn't be able to read from unreadable filehandle";

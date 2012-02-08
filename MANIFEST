@@ -2,7 +2,9 @@ Changes
 Makefile.PL
 MANIFEST
 README
-Slurp.pm
+lib/Perl6/Slurp.pm
+demo/demo_list_context.pl
+demo/demo_squeeze.pl
 t/chomp.t
 t/errors.t
 t/filehandle.t
@@ -14,3 +16,5 @@ t/irs.t
 t/layers.t
 t/lexfilehandle.t
 t/string.t
+t/no_source.t
+META.yml                                 Module meta-data (added by MakeMaker)

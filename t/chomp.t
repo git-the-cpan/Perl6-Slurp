@@ -82,6 +82,14 @@ TEST "list slurp with substitution chomp";
 @str = slurp \$data, {chomp=>"foo"};
 is_deeply \@str, [$line1."foo", $line2."foo", "foo", $line3."foo", $line4."foo"], $desc;
 
+TEST "scalar slurp with substitution chomp of '1'";
+$str = slurp \$data, {chomp=>"1"};
+is $str, $line1."1".$line2."11".$line3."1".$line4."1", $desc;
+
+TEST "list slurp with substitution chomp of '1'";
+@str = slurp \$data, {chomp=>"1"};
+is_deeply \@str, [$line1."1", $line2."1", "1", $line3."1", $line4."1"], $desc;
+
 TEST "scalar slurp with substitution chomp and :irs(\"\\n\")";
 $str = slurp \$data, {irs=>"\n", chomp=>"foo"};
 is $str, $line1."foo".$line2."foofoo".$line3."foo".$line4."foo", $desc;

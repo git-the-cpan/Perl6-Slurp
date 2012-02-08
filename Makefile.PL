@@ -1,8 +1,14 @@
-
+use strict;
+use warnings;
 use ExtUtils::MakeMaker;
-WriteMakefile(
-		NAME	=> q[Perl6::Slurp],
-		VERSION => q[0.03],
-		PREREQ_PM => { Perl6::Export=>0.07 },
 
-	     );
+WriteMakefile(
+    NAME          => 'Perl6::Slurp',
+    AUTHOR        => 'Damian Conway <DCONWAY@CPAN.org>',
+    VERSION_FROM  => 'lib/Perl6/Slurp.pm',
+    ABSTRACT_FROM => 'lib/Perl6/Slurp.pm',
+    PL_FILES      => {},
+    PREREQ_PM     => {},
+    dist          => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    clean         => { FILES => 'Perl6-Slurp-*' },
+);

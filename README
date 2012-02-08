@@ -1,9 +1,4 @@
-==============================================================================
-                   Release of version 0.03 of Perl6::Slurp
-==============================================================================
-
-
-Perl6/Form version 0.01
+Perl6::Slurp version 0.005000
 =======================
 
 Implements the Perl 6 'slurp' function (see Exegesis 7)
@@ -17,7 +12,7 @@ same caveat applies to this module.
 
 =head1 DEPENDENCIES
 
-Requires: Perl 5.8.0, Perl6::Export.
+Requires: Perl 5.8.0
 
 
 =head1 AUTHOR
@@ -30,22 +25,3 @@ Damian Conway (damian@conway.org)
  Copyright (c) 2003, Damian Conway. All Rights Reserved.
  This module is free software. It may be used, redistributed
     and/or modified under the same terms as Perl itself.
-
-
-==============================================================================
-
-CHANGES IN VERSION 0.03
-
-
-    - Updated Makefile.PL to note Perl6::Export 0.07 dependency
-
-	- Added correct behaviour when no source specified
-
-
-==============================================================================
-
-AVAILABILITY
-
-Perl6::Slurp has been uploaded to the CPAN
-
-==============================================================================
