@@ -38,3 +38,8 @@ Revision history for Perl extension Perl6::Slurp.
     - Improved performance significantly for chomped cases
 
     - Updated Makefile.PL and added Build.pl
+
+
+0.050000  Thu Feb  9 15:30:53 2012
+
+    - No feature changes: update to fix version number regression

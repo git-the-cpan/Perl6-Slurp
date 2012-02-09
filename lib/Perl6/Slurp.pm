@@ -5,7 +5,7 @@ use strict;
 use 5.008;
 use Carp;
 
-our $VERSION = '0.005000';
+our $VERSION = '0.050000';
 
 # Exports only the slurp() sub...
 sub import {
