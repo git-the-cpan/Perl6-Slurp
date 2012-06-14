@@ -5,7 +5,7 @@ use strict;
 use 5.008;
 use Carp;
 
-our $VERSION = '0.050000';
+our $VERSION = '0.051000';
 
 # Exports only the slurp() sub...
 sub import {
@@ -501,6 +501,6 @@ Damian Conway (damian@conway.org)
 
 =head1 COPYRIGHT
 
- Copyright (c) 2003, Damian Conway. All Rights Reserved.
+ Copyright (c) 2003-2012, Damian Conway. All Rights Reserved.
  This module is free software. It may be used, redistributed
     and/or modified under the same terms as Perl itself.

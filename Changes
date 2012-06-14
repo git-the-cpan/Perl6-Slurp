@@ -43,3 +43,8 @@ Revision history for Perl extension Perl6::Slurp.
 0.050000  Thu Feb  9 15:30:53 2012
 
     - No feature changes: update to fix version number regression
+
+
+0.051000  Thu Jun 14 20:52:15 2012
+
+    - Tweaked error.t to placate Windows (thanks mascip)
