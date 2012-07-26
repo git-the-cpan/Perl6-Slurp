@@ -5,7 +5,7 @@ use strict;
 use 5.008;
 use Carp;
 
-our $VERSION = '0.051000';
+our $VERSION = '0.051001';
 
 # Exports only the slurp() sub...
 sub import {
@@ -381,7 +381,8 @@ record separator and returns the resulting list of strings.
 You can set the input record separator (S<< C<< { irs => $your_irs_here}
 >> >>) for the input operation. The separator can be specified as a
 string or a regex. Note that an explicit input record separator has no
-effect in a scalar context, since C<slurp> always reads in everything anyway.
+input-terminating effect in a scalar context; C<slurp> always
+reads in the entire input stream, whatever the C<'irs'> value.
 
 In a list context, changing the separator can change how the input is
 broken up within the list that is returned.
