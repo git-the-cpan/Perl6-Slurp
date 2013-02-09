@@ -53,3 +53,17 @@ Revision history for Perl extension Perl6::Slurp.
 0.051001  Fri Jul 27 07:58:08 2012
 
     - Doc tweak (thanks John)
+
+
+
+0.051003  Sat Feb  9 11:59:34 2013
+
+    - Documented limitations of C<slurp> on certain platforms
+      (e.g. no piped opens under Windows).
+
+    - Allowed layer options to have parenthesized args
+      (Thanks Kevin)
+
+    - Handle File::Temp filehandles correctly (thanks Kevin)
+
+

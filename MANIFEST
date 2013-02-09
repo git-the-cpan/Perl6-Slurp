@@ -17,4 +17,5 @@ t/layers.t
 t/lexfilehandle.t
 t/string.t
 t/no_source.t
+t/filetemp.t
 META.yml                                 Module meta-data (added by MakeMaker)

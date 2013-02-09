@@ -4,8 +4,9 @@ use warnings;
 use strict;
 use 5.008;
 use Carp;
+use Scalar::Util 'refaddr';
 
-our $VERSION = '0.051001';
+our $VERSION = '0.051003';
 
 # Exports only the slurp() sub...
 sub import {
@@ -21,7 +22,7 @@ my $mode_pat = qr{
 # Recognize a mode followed by optional layer arguments...
 my $mode_plus_layers = qr{
     (?: $mode_pat | ^ \s* -\| \s* )
-    ( (?: :[^\W\d]\w* \s* )* )
+    ( (?: :[^\W\d]\w* (?: \( .*? \) ?)? \s* )* )
     \s*
     \z
 }x;
@@ -173,7 +174,7 @@ sub slurp {
     }
 
     # Acquire data (working around bug between $/ and in magic ARGV)...
-    my $data = $FH == \*ARGV ? join("",<>) : do { local $/; <$FH> };
+    my $data = refaddr($FH) == \*ARGV ? join("",<>) : do { local $/; <$FH> };
 
     # Prepare input record separator regex...
     my $irs = ref($/)       ? $/
@@ -251,7 +252,7 @@ Perl6::Slurp - Implements the Perl 6 'slurp' built-in
     $str_contents = slurp '<', \$string;
 
 
-    # Slurp a pipe...
+    # Slurp a pipe (not on Windows, alas)...
 
     $str_contents = slurp 'tail -20 $filename |';
     $str_contents = slurp '-|', 'tail', -20, $filename;
@@ -355,8 +356,9 @@ a scalar reference,
 
 =back
 
-converts it to an input stream if necessary, and reads in the entire stream.
-If C<slurp> fails to set up or read the stream, it throws an exception.
+converts it to an input stream (using C<open()> if necessary), and reads
+in the entire stream. If C<slurp> fails to set up or read the stream, it
+throws an exception.
 
 If no data source is specified C<slurp> uses the value of C<$_> as the
 source. If C<$_> is undefined, C<slurp> uses the C<@ARGV> list,
@@ -483,11 +485,17 @@ Use an array instead:
     slurp $filename, [layer1=>1, layer2=>1, etc=>1];
 
 
-=head1 WARNING
+=head1 WARNINGS
 
 The syntax and semantics of Perl 6 is still being finalized
 and consequently is at any time subject to change. That means the
 same caveat applies to this module.
+
+When called with a filename or piped shell command, C<slurp()> uses
+Perl's built- in C<open()> to access the file. This means that it
+is subject to the same platform-specific limitations as C<open()>.
+For example, slurping from piped shell commands may not work 
+under Windows.
 
 
 =head1 DEPENDENCIES
