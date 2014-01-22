@@ -2,10 +2,12 @@ use Test::More "no_plan";
 use utf8;
 BEGIN {use_ok(Perl6::Slurp)};
 
+my $FILENAME = 'no_source.t.data';
+
 my $desc;
 sub TEST { $desc = $_[0] };
 
-open FH, '>:utf8', 'data' or exit;
+open FH, '>:utf8', $FILENAME or exit;
 print FH map chr, 0..0x1FF;
 close FH;
 
@@ -18,13 +20,13 @@ my @layers = ( qw(:raw :bytes :unix :stdio :perlio :crlf :utf8),
 
 
 for my $layer (@layers) {
-	open FH, "<$layer", 'data' or exit;
+	open FH, "<$layer", $FILENAME or exit;
 	$data{$layer} = <FH>;
 	$len{$layer}  = length $data{$layer};
 	close FH;
 }
 
-$_ = 'data';
+$_ = $FILENAME;
 
 %opts = (
 	':raw'       => [{raw=>1}],
@@ -41,4 +43,4 @@ for my $layer (keys %opts) {
 	ok length($str) == $len{$layer}, "length of $desc";
 }
 
-unlink 'data';
+unlink $FILENAME;

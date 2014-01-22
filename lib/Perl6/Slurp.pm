@@ -6,7 +6,7 @@ use 5.008;
 use Carp;
 use Scalar::Util 'refaddr';
 
-our $VERSION = '0.051003';
+our $VERSION = '0.051004';
 
 # Exports only the slurp() sub...
 sub import {
@@ -112,7 +112,7 @@ sub slurp {
     # This track the various options slurp() allows...
     my ($chomp, $chomp_to, $layers) = (0, "", "");
 
-    # Can this slurp be done in an optimized way (assume so initally)???
+    # Can this slurp be done in an optimized way (assume so initially)???
     my $optimized = 1;
 
     # Decode the layers and options...
@@ -140,7 +140,7 @@ sub slurp {
         $layers .= join " ", map ":$_", keys %$_;
     }
 
-    # Add any layers foudn to the mode specification...
+    # Add any layers found to the mode specification...
     $mode .= " $layers";
 
     # Open the source as a filehandle...
@@ -404,7 +404,7 @@ You can also tell C<slurp> to compute the replacement string on-the-fly
 by specifying a subroutine as the C<chomp> value:
 (S<< C<< { chomp => sub{...} } >> >>). This subroutine is passed the string
 being chomped off, so for example you could squeeze single newlines to a
-single space and multiple conseqcutive newlines to a two newlines with:
+single space and multiple consecutive newlines to a two newlines with:
 
     sub squeeze {
         my ($removed) = @_;
@@ -500,7 +500,7 @@ under Windows.
 
 =head1 DEPENDENCIES
 
-Requires: Perl 5.8.0, Perl6::Export
+Requires: Perl 5.8.0
 
 
 =head1 AUTHOR

@@ -67,3 +67,15 @@ Revision history for Perl extension Perl6::Slurp.
     - Handle File::Temp filehandles correctly (thanks Kevin)
 
 
+
+
+0.051004  Wed Jan 22 17:24:31 2014
+
+    * De-documented spurious dependency on Perl6::Export
+      (thanks, Andrew)
+
+    * De-typo-ficated source
+      (thanks, dsteinbrunner)
+
+    * Made file-based tests independent, so they can run in parallel
+      (thanks Kent!)
