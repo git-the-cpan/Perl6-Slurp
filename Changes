@@ -79,3 +79,9 @@ Revision history for Perl extension Perl6::Slurp.
 
     * Made file-based tests independent, so they can run in parallel
       (thanks Kent!)
+
+
+0.051005  Sat Feb 22 19:38:25 2014
+
+    * Removed illegal assignments to $/ under 5.20+
+      (thanks, Kent)

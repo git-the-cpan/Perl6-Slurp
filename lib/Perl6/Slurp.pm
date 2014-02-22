@@ -6,7 +6,7 @@ use 5.008;
 use Carp;
 use Scalar::Util 'refaddr';
 
-our $VERSION = '0.051004';
+our $VERSION = '0.051005';
 
 # Exports only the slurp() sub...
 sub import {
@@ -116,12 +116,14 @@ sub slurp {
     my $optimized = 1;
 
     # Decode the layers and options...
+    my $IRS = "\n";
     for (@layers_or_options) {
         # Input record separator...
         if (exists $_->{irs}) {
-            $/ = $_->{irs};
+            $IRS = $_->{irs};
+            $/ = $IRS if !ref($IRS);
             delete $_->{irs};
-            $optimized &&= !ref($/);    # ...can't be optimized if irs is a regex
+            $optimized &&= !ref($IRS);    # ...can't be optimized if irs is a regex
         }
 
         # Autochomp...
@@ -177,8 +179,8 @@ sub slurp {
     my $data = refaddr($FH) == \*ARGV ? join("",<>) : do { local $/; <$FH> };
 
     # Prepare input record separator regex...
-    my $irs = ref($/)       ? $/
-            : defined($/)   ? qr{\Q$/\E}
+    my $irs = ref($IRS)     ? $IRS
+            : defined($IRS) ? qr{\Q$IRS\E}
             :                 qr{(?!)};
 
     # List context may require input record separator processing...
